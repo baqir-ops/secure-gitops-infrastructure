@@ -24,3 +24,8 @@ tfplan
 
 # OS files
 .DS_Store
+
+# Terraform generated files
+**/tfplan*
+crash.log
+crash.*.log
