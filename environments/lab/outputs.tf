@@ -20,7 +20,7 @@ output "cluster_oidc_provider_arn" {
 
 output "ecr_repository_url" {
   description = "Amazon ECR repository URL for the application"
-  value       = aws_ecr_repository.app.repository_url
+  value       = data.aws_ecr_repository.app.repository_url
 }
 
 output "ebs_csi_role_arn" {
