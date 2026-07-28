@@ -70,7 +70,18 @@ module "eks" {
       max_size     = 2
       desired_size = 1
 
-      disk_size = 30
+      block_device_mappings = {
+        xvda = {
+          device_name = "/dev/xvda"
+
+          ebs = {
+            delete_on_termination = true
+            encrypted             = true
+            volume_size           = 30
+            volume_type           = "gp3"
+          }
+        }
+      }
 
       labels = {
         workload = "general"
