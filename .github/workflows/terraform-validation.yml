@@ -3,6 +3,7 @@ name: Terraform Validation
 on:
   pull_request:
     paths:
+      - '**/.terraform.lock.hcl'
       - '**/*.tf'
       - '**/*.tfvars.example'
       - '.github/workflows/terraform-validation.yml'
@@ -10,6 +11,7 @@ on:
     branches:
       - main
     paths:
+      - '**/.terraform.lock.hcl'
       - '**/*.tf'
       - '**/*.tfvars.example'
       - '.github/workflows/terraform-validation.yml'
