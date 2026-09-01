@@ -148,22 +148,18 @@ Argo CD manages Kubernetes application deployment.
 
 The lab environment provisions a dedicated VPC for the Secure GitOps Platform.
 
-The infrastructure includes:
+The lab infrastructure includes:
 
 - VPC
-- Public subnets
-- Private subnets
+- Two public subnets
 - Internet Gateway
-- NAT Gateway
 - Route tables
 - Route table associations
 - Security groups
 - Network ACL configuration
 - VPC flow logging where configured
 
-The EKS worker nodes operate inside the VPC.
-
----
+NAT Gateway is intentionally disabled in the lab to reduce cost.
 
 ## Amazon EKS
 
@@ -264,7 +260,7 @@ Security considerations include:
 - Security groups
 - Restricted Kubernetes API access
 - EKS access controls
-- Private worker nodes where applicable
+- Worker nodes deployed in the lab subnets defined by Terraform
 
 ---
 
