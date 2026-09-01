@@ -8,6 +8,11 @@ This repository provides the AWS infrastructure required to run a secure, GitOps
 
 ## Architecture
 
+The lab infrastructure uses a cost-conscious AWS network design with two public
+subnets and no NAT Gateway. EKS worker nodes are deployed into these public
+subnets, while the Kubernetes API endpoint supports both private and restricted
+public access.
+
     Internet
         |
         v
@@ -25,27 +30,47 @@ This repository provides the AWS infrastructure required to run a secure, GitOps
         +------+------+
         |             |
         v             v
-    Public Subnets   Private Subnets
+    Public Subnet  Public Subnet
+    10.20.1.0/24   10.20.2.0/24
         |             |
-        |             v
-        |        EKS Worker Nodes
+        +------+------+
+               |
+               v
+    +----------------------+
+    |      Amazon EKS      |
+    | secure-gitops-cluster|
+    +----------+-----------+
+               |
+        +------+------+
         |             |
-        |             v
-        |      +-------------+
-        |      |  Amazon EKS |
-        |      | secure-gitops
-        |      +------+------+
-        |             |
-        |             v
-        |          Argo CD
-        |             |
-        |       +-----+------+
-        |       |            |
-        |       v            v
-        |     Dev/Staging  Production
-        |
-        +--> NAT Gateway / Internet Gateway
+        v             v
+    EKS Node Group    EKS Add-ons
+      general         CoreDNS
+      t3.large        VPC CNI
+                      kube-proxy
+                      EBS CSI
+                      Pod Identity
+               |
+               v
+             Argo CD
+               |
+        +------+-------+
+        |      |       |
+        v      v       v
+       Dev  Staging Production
 
+Network characteristics:
+
+- VPC CIDR: `10.20.0.0/16`
+- Availability Zones: 2
+- Public subnets: `10.20.1.0/24` and `10.20.2.0/24`
+- NAT Gateway: disabled for the lab
+- DNS support: enabled
+- DNS hostnames: enabled
+- EKS private API access: enabled
+- EKS public API access: enabled
+- Public EKS API access is restricted to an explicit `/32` CIDR
+---
 
 ## Project Overview
 
@@ -805,19 +830,19 @@ After CI passes and the change is reviewed, merge the pull request.
 
 # Branch Protection
 
-The main branch should require:
+The `main` branch is intended to use a pull-request-based workflow.
 
-- Pull requests
-- Required CI checks
-- Successful validation
+Recommended protection rules:
+
+- Pull requests required for normal changes
+- Required Terraform validation checks
+- Successful CI validation before merge
 - Code review where appropriate
+- Direct pushes to `main` should not be used for normal changes
 
-Direct pushes to main should not be used for normal changes.
-
-This project has already encountered the protected branch workflow where direct pushes were rejected because changes must be made through pull requests.
-
-That behavior is expected and is a security control.
-
+The repository currently uses pull requests for infrastructure changes. Branch
+protection should be enabled in GitHub repository settings so that the required
+CI checks are enforced server-side.
 ---
 
 # Troubleshooting
