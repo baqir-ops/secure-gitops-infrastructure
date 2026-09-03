@@ -1,5 +1,7 @@
 # Secure GitOps Infrastructure
 
+[![Terraform Validation](https://github.com/baqir-ops/secure-gitops-infrastructure/actions/workflows/terraform-validation.yml/badge.svg)](https://github.com/baqir-ops/secure-gitops-infrastructure/actions/workflows/terraform-validation.yml)
+
 Terraform infrastructure for the Secure GitOps Platform running on AWS EKS.
 
 Provisions the AWS layer — networking, EKS, IAM, ECR, and encryption — for a
@@ -66,6 +68,17 @@ kubectl get applications -n argocd
 - **No secrets committed** — AWS Secrets Manager / SSM Parameter Store / GitHub Actions Secrets used instead
 
 Full checklist and troubleshooting steps: [`docs/RUNBOOK.md`](docs/RUNBOOK.md)
+
+## Screenshots
+
+**Terraform apply — infrastructure provisioned successfully**
+![Terraform apply success](docs/screenshots/phase-02/phase-02-01-terraform-apply-success.png)
+
+**EKS nodes healthy and Ready**
+![EKS nodes ready](docs/screenshots/phase-02/phase-02-02-eks-node-ready.png)
+
+**GitHub OIDC trust policy + ECR security settings**
+![OIDC trust and ECR security](docs/screenshots/phase-06/phase-06-02-oidc-trust-and-ecr-security.png)
 
 ## Related repositories
 
